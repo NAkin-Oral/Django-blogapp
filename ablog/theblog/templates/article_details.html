@@ -26,7 +26,6 @@
                     <div class="columns">
                         <div class="column is-8 is-offset-2">
                             <div class="content is-medium">
-                                
                                 <br>
                                 <h3>{{post.post_date|date:'M / d / y'}}</h3>
                                 <br />
@@ -43,27 +42,55 @@
                                     <hr>
                                     <form action="{% url 'like_post' post.pk %}" method="POST" >
                                         {% csrf_token %}
-
                                         {% if liked %}
                                             <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-danger btn-sm" >Unlike</button> - <strong>{{total_likes}} Likes</strong>
                                         {% else %}
                                             <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-primary btn-sm" >Like</button> - <strong>{{total_likes}} Likes</strong>
                                         {% endif %}
                                     </form>
-
                                 {% else %}
                                     <br>
                                     <br>
                                     <hr>
-
                                     <h4>You must <a href="{% url 'login' %}">login</a> or <a href="{% url 'register' %}">register</a> to like posts. &#128572</h4>
                                     <strong>{{total_likes}} Likes</strong>
-
                                 {% endif %}
+                                <br>
+                                <br>
                             </div>
                         </div>
                     </div>
             </section>
+            <div class="card mb-3" >
+                <div class="row g-0">
+                  <div class="col-md-4">
+                    <img src="{{post.author.profile.profile_pic.url}}" class="img-fluid rounded-start" alt="{{post.author.first_name}}">
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                        <div class="content is-medium">
+                            <h5 class="card-title">{{post.author.first_name}} {{post.author.last_name}}</h5>
+                        </div>
+                        <p class="text-muted small">
+                            {% if post.author.profile.website_url %}
+                                <a href="{{post.author.profile.website_url}}">Website</a> 
+                            {% endif %}
+                            {% if post.author.profile.facebook_url %}
+                            | <a href="{{post.author.profile.facebook_url}}">Facebook</a> 
+                            {% endif %}
+                            {% if post.author.profile.instagram_url %}
+                            | <a href="{{post.author.profile.instagram_url}}">Instagram</a> 
+                            {% endif %}
+                            {% if post.author.profile.twitter_url %}
+                            | <a href="{{post.author.profile.twitter_url}}">Twitter</a> 
+                            {% endif %}
+                        </p>
+                          <br>
+                          <p class="card-text">{{post.author.profile.bio}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
         </div>
     </div>
 </section>
