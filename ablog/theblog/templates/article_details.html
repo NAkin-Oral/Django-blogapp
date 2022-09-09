@@ -3,51 +3,71 @@
 {% block title %} {{ post.title }} {% endblock %}
 
 {%block content %}
+<section class="hero">
+    <div class="hero-body">
+        <div class="container">
+            <section class="section">
+                <div class = "content box">
+                    <div class="content is-medium">
+                        <strong><h1>{{post.title}}</h1></strong>
+                        <small>By: {{post.author.first_name}} {{post.author.last_name}}
+                        {% if user.is_authenticated %}
+                            {% if user.id == post.author.id %}
+                                <small><a href="{% url 'update_post' post.pk %}">(Edit)</a></small> / </small><small><a href="{% url 'delete_post' post.pk %}">(Delete)</a></small>
+                            {% endif %}
+                        {% endif %}
+                        <br>
+                    </div>
+                    {% if post.header_image %}
+                        <figure class="image mb-6">
+                        <img class="img-fluid" src="{{ post.header_image.url }}">
+                        </figure>
+                    {% endif %}
+                    <div class="columns">
+                        <div class="column is-8 is-offset-2">
+                            <div class="content is-medium">
+                                
+                                <br>
+                                <h3>{{post.post_date|date:'M / d / y'}}</h3>
+                                <br />
+                                <strong>Category: <a href="{% url 'category' post.category %}">{{post.category}}</a></strong>
+                                <hr />
+                                <br />
+                                {{post.body|safe}}
+                                <br />
+                                <br />
+                                <a class="btn btn-secondary" href="{% url 'home' %}">Back</a>
+                                {% if user.is_authenticated %}
+                                    <br>
+                                    <br>
+                                    <hr>
+                                    <form action="{% url 'like_post' post.pk %}" method="POST" >
+                                        {% csrf_token %}
 
-<strong><h1>{{post.title}}</h1></strong>
-<small>By: {{post.author.first_name}} {{post.author.last_name}}
-{% if user.is_authenticated %}
-    {% if user.id == post.author.id %}
-    <small><a href="{% url 'update_post' post.pk %}">(Edit)</a></small> / </small><small><a href="{% url 'delete_post' post.pk %}">(Delete)</a></small>
-    {% endif %}
-{% endif %}
-<br>
-<br>
-<h3>{{post.post_date|date:'M / d / y'}}</h3>
-<br />
-<strong>Category: <a href="{% url 'category' post.category %}">{{post.category}}</a></strong>
-<hr />
-<br />
-{{post.body|safe}}
-<br />
-<br />
+                                        {% if liked %}
+                                            <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-danger btn-sm" >Unlike</button> - <strong>{{total_likes}} Likes</strong>
+                                        {% else %}
+                                            <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-primary btn-sm" >Like</button> - <strong>{{total_likes}} Likes</strong>
+                                        {% endif %}
+                                    </form>
 
-<a class="btn btn-secondary" href="{% url 'home' %}">Back</a>
+                                {% else %}
+                                    <br>
+                                    <br>
+                                    <hr>
 
-{% if user.is_authenticated %}
-<br>
-<br>
-<hr>
-<form action="{% url 'like_post' post.pk %}" method="POST" >
-    {% csrf_token %}
+                                    <h4>You must <a href="{% url 'login' %}">login</a> or <a href="{% url 'register' %}">register</a> to like posts. &#128572</h4>
+                                    <strong>{{total_likes}} Likes</strong>
 
-    {% if liked %}
-    <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-danger btn-sm" >Unlike</button> - <strong>{{total_likes}} Likes</strong>
-    {% else %}
-    <button type="submit" name="post_id" value="{{post.id}}" class="btn btn-primary btn-sm" >Like</button> - <strong>{{total_likes}} Likes</strong>
-    {% endif %}
-
-</form>
-
-{% else %}
-<br>
-<br>
-<hr>
-
-    <h4>You must <a href="{% url 'login' %}">login</a> or <a href="{% url 'register' %}">register</a> to like posts. &#128572</h4>
-    <strong>{{total_likes}} Likes</strong>
-
-{% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+            </section>
+        </div>
+    </div>
+</section>
 
 {% endblock %}
 
+    

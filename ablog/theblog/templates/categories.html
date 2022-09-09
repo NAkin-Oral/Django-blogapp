@@ -1,40 +1,53 @@
-{% extends 'base.html' %}
-
+{% extends 'base.html' %} 
 {% block title %} {{cats}} {% endblock %} 
 
 {%block content%}
 
-
-{% if category_posts %}
-
-<h1>{{cats}}</h1>
-
-<ul>
-{% for post in category_posts %}
-
-<li>
-    <strong><a class="fs-1" href="{% url 'article-detail' post.pk %}">{{post.title}}</a></strong>
-    <br>
-    Written by: <strong>{{post.author.first_name}} {{post.author.last_name}} </strong>
-    {% if user.is_authenticated %}
-    - <small><a href="{% url 'update_post' post.pk %}">(Edit)</a></small> /
-    <small><a href="{% url 'delete_post' post.pk %}">(Delete)</a></small>
-    {% endif %}
-    <br>
-    <hr>
-    <h6>{{post.post_date|date:'M / d / y'}}</h6>
-    {{post.body | slice:":200"|safe}}
-  </li>
-  <br>
-
-{% endfor %}
-</ul>
-
-{% else %}
-
-<h3><strong>Sorry this category doesn't have posts!</strong></h3>
-
-{% endif %}
-
+<section class="hero">
+  <div class="container">
+      <section class="section">
+        <div class="columns">
+          <div class="column is-8 is-offset-2">
+            <div class="content is-medium">
+              <strong><h1>{{cats}}</h1></strong>
+            </div>
+            {% if category_posts %}
+                {% for post in category_posts %}
+                  <div class="content box is-medium">
+                      <strong><a class="fs-1" href="{% url 'article-detail' post.pk %}">{{post.title}}</a></strong>
+                      <br />
+                      Written by:
+                      <strong>{{post.author.first_name}} {{post.author.last_name}}</strong>
+                      {% if user.is_authenticated %}
+                        {% if user.id == post.author.id %} -
+                            <small><a href="{% url 'update_post' post.pk %}">(Edit)</a></small>
+                            /
+                            <small><a href="{% url 'delete_post' post.pk %}">(Delete)</a></small>
+                          {% endif %} 
+                      {% endif %}
+                      <br />
+                      {% if post.header_image %}
+                        <figure class="image mb-6">
+                          <img class="img-fluid" src="{{ post.header_image.url }}" />
+                        </figure>   
+                      {% endif %}
+                      <br />
+                      <strong>Category:
+                        <a href="{% url 'category' post.category %}">{{post.category}}</a>
+                      </strong>
+                      <hr />
+                      <h6>{{post.post_date|date:'M / d / y'}}</h6>
+                      {{post.snippet}}
+                    <br />
+                  </div>
+                {% endfor %}
+              {% else %}
+                <h3><strong>Sorry this category doesn't have posts!</strong></h3>
+            {% endif %}
+          </div>
+        </div>
+      </section>
+  </div>
+</section>
 
 {% endblock %}

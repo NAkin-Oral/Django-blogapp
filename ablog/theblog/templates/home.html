@@ -1,34 +1,49 @@
 {% extends 'base.html' %} 
-
 {% block title %} Home {% endblock %} 
 
 {%block content%}
 
-<h1>Post</h1>
-
-<ul>
-  {% for post in object_list %}
-
-  <li>
-    <strong><a class="fs-1" href="{% url 'article-detail' post.pk %}">{{post.title}}</a></strong>
-    <br>
-    Written by: <strong>{{post.author.first_name}} {{post.author.last_name}} </strong>
-    {% if user.is_authenticated %}
-      {% if user.id == post.author.id %}
-      - <small><a href="{% url 'update_post' post.pk %}">(Edit)</a></small> /
-      <small><a href="{% url 'delete_post' post.pk %}">(Delete)</a></small>
-      {% endif %}
-    {% endif %}
-    <br>
-    <br>
-    <strong>Category: <a href="{% url 'category' post.category %}">{{post.category}}</a></strong>
-    <hr>
-    <h6>{{post.post_date|date:'M / d / y'}}</h6>
-    {{post.snippet}}
-  </li>
-  <br>
-
-  {% endfor %}
-</ul>
+<section class="hero">
+  <div class="container">
+      <section class="section">
+        <div class="columns">
+          <div class="column is-8 is-offset-2">
+            <div class="content is-medium">
+              <strong><h1>Posts</h1></strong>
+            </div>
+                {% for post in object_list %}
+                  <div class="content box is-medium">
+                      <strong><a class="fs-1" href="{% url 'article-detail' post.pk %}">{{post.title}}</a></strong>
+                      <br />
+                      Written by:
+                      <strong>{{post.author.first_name}} {{post.author.last_name}}</strong>
+                      {% if user.is_authenticated %}
+                        {% if user.id == post.author.id %} -
+                            <small><a href="{% url 'update_post' post.pk %}">(Edit)</a></small>
+                            /
+                            <small><a href="{% url 'delete_post' post.pk %}">(Delete)</a></small>
+                          {% endif %} 
+                      {% endif %}
+                      <br />
+                      {% if post.header_image %}
+                        <figure class="image mb-6">
+                          <img class="img-fluid" src="{{ post.header_image.url }}" />
+                        </figure>   
+                      {% endif %}
+                      <br />
+                      <strong>Category:
+                        <a href="{% url 'category' post.category %}">{{post.category}}</a>
+                      </strong>
+                      <hr />
+                      <h6>{{post.post_date|date:'M / d / y'}}</h6>
+                      {{post.snippet}}
+                    <br />
+                  </div>
+                {% endfor %}
+          </div>
+        </div>
+      </section>
+  </div>
+</section>
 
 {% endblock %}

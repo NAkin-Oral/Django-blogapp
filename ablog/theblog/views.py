@@ -43,7 +43,8 @@ def CategoryListView(request):
 def CategoryView(request, cats):
     category_posts = Post.objects.filter(category=cats)
     cat_menu = Category.objects.all()
-    return render(request, "categories.html", {"cats": cats, "category_posts":category_posts, "cat_menu":cat_menu})
+    ordering = ["-id"]
+    return render(request, "categories.html", {"cats": cats, "category_posts":category_posts, "cat_menu":cat_menu, "ordering":ordering})
 
 class ArticleDetailView(DetailView):
     model = Post
