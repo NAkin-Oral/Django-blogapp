@@ -1,1 +1,0 @@
-wev:gunicorn ablog.wsgi
