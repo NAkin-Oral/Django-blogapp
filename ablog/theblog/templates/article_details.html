@@ -11,7 +11,7 @@
                 <div class = "content box">
                     <div class="content is-medium">
                         <strong><h1>{{post.title}}</h1></strong>
-                        <small>By: {{post.author.first_name}} {{post.author.last_name}}
+                        <small>By: {{post.author.first_name}} {{post.author.last_name}}</small>
                         {% if user.is_authenticated %}
                             {% if user.id == post.author.id %}
                                 <small><a href="{% url 'update_post' post.pk %}">(Edit)</a></small> / </small><small><a href="{% url 'delete_post' post.pk %}">(Delete)</a></small>
@@ -31,15 +31,10 @@
                                 <h3>{{post.post_date|date:'M / d / y'}}</h3>
                                 <br />
                                 <strong>Category: <a href="{% url 'category' post.category %}">{{post.category}}</a></strong>
-                                <hr />
-                                <br />
+                                <hr/>
+                                <br/>
                                 {{post.body|safe}}
-                                <br />
-                                <br />
-                                <a class="btn btn-secondary" href="{% url 'home' %}">Back</a>
                                 {% if user.is_authenticated %}
-                                    <br>
-                                    <br>
                                     <hr>
                                     <form action="{% url 'like_post' post.pk %}" method="POST" >
                                         {% csrf_token %}
@@ -57,7 +52,24 @@
                                     <strong>{{total_likes}} Likes</strong>
                                 {% endif %}
                                 <br>
-                                <br>
+                                <h2>Comments</h2>
+                                {% if not post.comments.all %}
+                                <ul>
+                                    <li><h4>No Comments Yet For This Post.</h4></li>
+                                </ul>
+                                {% else %}
+                                <ol class="list-group list-group-numbered">
+                                    {% for comment in post.comments.all  %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">
+                                                <small>By: {{comment.name}} <br> In: {{comment.date_added|date:'M / d / y'}}</small>
+                                            </div>
+                                        <p>{{comment.body}}</p>
+                                    </div></li>
+                                    {% endfor %}
+                                </ol>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
