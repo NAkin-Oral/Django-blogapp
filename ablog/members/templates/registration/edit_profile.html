@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %} Edit Profile {% endblock %}
+{% block title %} Edit Settings {% endblock %}
 
 {%block content%}
 
 <div class="content is-medium">
-    <strong><h1>Edit Profile</h1></strong>
+    <strong><h1>Edit Settings</h1></strong>
 </div>
 <br>
 <br>
@@ -16,7 +16,9 @@
     <form method="POST">
         {% csrf_token %}
         {{form.as_p}}
-        <button class="btn btn-secondary" >Edit Profile</button>
+        <div class="content is-medium">
+            <button class="btn btn-secondary" >Edit Settings</button>
+        </div>
     </form>
 </div>
 
